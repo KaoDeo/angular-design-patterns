@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 @Injectable({ providedIn: 'root' })
 export class SnackbarMessageStrategy implements MessageStrategy {
   private _snackBar = inject(MatSnackBar);
+
   send(message: string): void {
     this.openSnackBar(message);
   }

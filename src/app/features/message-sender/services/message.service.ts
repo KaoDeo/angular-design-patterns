@@ -5,31 +5,20 @@ import { MessageStrategy } from '../types';
 @Injectable()
 export class MessageService {
   constructor(
+    // @Inject(MESSAGE_STRATEGIES)
+    // private strategies: Record<string, MessageStrategy>
     @Inject(MESSAGE_STRATEGIES)
-    private strategies: Record<string, MessageStrategy>
+    private strategies: Record<string, () => MessageStrategy>
   ) {}
 
   send(type: string, message: string) {
-    const strategy = this.strategies[type];
+    //  const strategy = this.strategies[type];
+    const strategy = this.strategies[type](); // create instance on demand
 
     if (!strategy) {
       throw new Error(`Unknown strategy: ${type}`);
     }
     strategy.send(message);
-  }
-
-  sendWithOptions(
-    type: string,
-    message: string,
-    options?: { severity?: 'info' | 'warning' | 'error'; duration?: number }
-  ): void {
-    const strategy = this.strategies[type];
-    if (!strategy) throw new Error(`Unknown strategy: ${type}`);
-    strategy.send(message, options);
-  }
-
-  registerStrategy(name: string, strategy: MessageStrategy) {
-    this.strategies[name] = strategy;
   }
 
   removeStrategy(name: string) {

@@ -1,4 +1,4 @@
-import { Component, InjectionToken } from '@angular/core';
+import { Component, InjectionToken, Injector } from '@angular/core';
 import { MessageSenderSelectComponent } from '../components/message-sender-select.component';
 import { MessageStrategy } from '../types';
 import {
@@ -16,26 +16,39 @@ export const MESSAGE_STRATEGIES = new InjectionToken<
   selector: 'message-sender',
   templateUrl: './message-sender.component.html',
   imports: [MessageSenderSelectComponent],
+  // providers: [
+  //   {
+  //     provide: MESSAGE_STRATEGIES,
+  //     useFactory: (
+  //       toast: ToastMessageStrategy,
+  //       snackbar: SnackbarMessageStrategy,
+  //       log: ConsoleLogStrategy,
+  //       banner: BannerMessageStrategy
+  //     ) => ({
+  //       toast,
+  //       snackbar,
+  //       log,
+  //       banner,
+  //     }),
+  //     deps: [
+  //       ToastMessageStrategy,
+  //       SnackbarMessageStrategy,
+  //       ConsoleLogStrategy,
+  //       BannerMessageStrategy,
+  //     ],
+  //   },
+  // ],
+
   providers: [
     {
       provide: MESSAGE_STRATEGIES,
-      useFactory: (
-        toast: ToastMessageStrategy,
-        snackbar: SnackbarMessageStrategy,
-        log: ConsoleLogStrategy,
-        banner: BannerMessageStrategy
-      ) => ({
-        toast,
-        snackbar,
-        log,
-        banner,
+      useFactory: (injector: Injector) => ({
+        toast: () => injector.get(ToastMessageStrategy),
+        snackbar: () => injector.get(SnackbarMessageStrategy),
+        log: () => injector.get(ConsoleLogStrategy),
+        banner: () => injector.get(BannerMessageStrategy),
       }),
-      deps: [
-        ToastMessageStrategy,
-        SnackbarMessageStrategy,
-        ConsoleLogStrategy,
-        BannerMessageStrategy,
-      ],
+      deps: [Injector],
     },
   ],
 })
