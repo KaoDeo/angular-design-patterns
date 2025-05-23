@@ -1,0 +1,5 @@
+<mat-chip-set aria-label="Dog selection">
+  <ng-container *ngFor="let event of logs()">
+    <mat-chip> {{event?.type}} {{event?.timestamp | date :'short'}} </mat-chip>
+  </ng-container>
+</mat-chip-set>

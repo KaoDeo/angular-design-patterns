@@ -1,5 +1,9 @@
 import { Routes } from '@angular/router';
-import { MessageSenderComponent } from './features';
+import {
+  AnalyticsComponent,
+  AuditLogsComponent,
+  MessageSenderComponent,
+} from './features';
 
 export const routes: Routes = [
   {
@@ -10,5 +14,14 @@ export const routes: Routes = [
     path: '',
     redirectTo: 'message-sender',
     pathMatch: 'full',
+  },
+
+  {
+    path: 'analytics',
+    component: AnalyticsComponent,
+  },
+  {
+    path: 'audit-logs',
+    component: AuditLogsComponent,
   },
 ];

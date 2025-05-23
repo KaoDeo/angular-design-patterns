@@ -9,4 +9,11 @@ html {
       density: 0,
     )
   );
+
+  @include mat.chips-overrides(
+    (
+      label-text-color: rgb(60, 50, 50),
+      label-text-size: "0.5rem",
+    )
+  );
 }
