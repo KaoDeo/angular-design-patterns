@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import {
   AnalyticsComponent,
   AuditLogsComponent,
+  CoffeeShopComponent,
   MessageSenderComponent,
 } from './features';
 
@@ -23,5 +24,10 @@ export const routes: Routes = [
   {
     path: 'audit-logs',
     component: AuditLogsComponent,
+  },
+
+  {
+    path: 'coffee-shop',
+    component: CoffeeShopComponent,
   },
 ];

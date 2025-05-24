@@ -1,0 +1,16 @@
+.card-container {
+  min-height: 100px;
+  background: transparent;
+}
+
+.form-container {
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.controls-container {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}

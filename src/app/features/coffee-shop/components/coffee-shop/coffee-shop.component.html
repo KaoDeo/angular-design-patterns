@@ -1,0 +1,47 @@
+<form [formGroup]="form" class="form-container">
+  <div class="controls-container">
+    <mat-form-field>
+      <mat-label>Coffee</mat-label>
+      <mat-select formControlName="coffee" name="food">
+        <mat-option>None</mat-option>
+        @for (item of beverages; track item) {
+        <mat-option [value]="item.value">{{ item.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Toppings</mat-label>
+      <mat-select formControlName="toppings" name="food">
+        <mat-option>None</mat-option>
+        @for (item of toppings; track item) {
+        <mat-option [value]="item.value">{{ item.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Quantity</mat-label>
+      <input matInput type="number" formControlName="quantity" />
+    </mat-form-field>
+
+    <button mat-flat-button (click)="onAdd()">Add</button>
+  </div>
+
+  <mat-card appearance="outlined" class="card-container">
+    <mat-chip-set>
+      @for (item of chipSetCtrl.value; track $index) {
+      <mat-chip (removed)="onRemove($index)">
+        <span>{{ item.name }}</span>
+        <span *ngIf="item?.value">-</span>
+        <span>{{ item?.value }}</span>
+        <button matChipRemove>
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip>
+      }
+    </mat-chip-set>
+  </mat-card>
+
+  <button mat-flat-button (click)="onBuild()">Build Drink</button>
+</form>

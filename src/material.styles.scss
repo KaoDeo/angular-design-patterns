@@ -14,6 +14,14 @@ html {
     (
       label-text-color: rgb(60, 50, 50),
       label-text-size: "0.5rem",
+      outline-color: rgb(60, 50, 50),
+    )
+  );
+
+  @include mat.card-overrides(
+    (
+      subtitle-text-color: orange,
+      elevated-container-color: red,
     )
   );
 }
