@@ -1,28 +1,22 @@
-import { Component, Inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 import {
   FormArray,
-  FormBuilder,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatSelectModule } from '@angular/material/select';
-import { BeverageEnum, ToppingsEnum } from '../../types';
-import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import {
-  CONDIMENT_REGISTRY,
-  Cream,
-  Milk,
-  Mocha,
-  Soy,
-  Whip,
-} from '../../services/condiments.service';
-import { CondimentDecorator } from '../../condiment.decorator';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { DarkRoast, Espresso, HouseBlend } from '../../services';
+
+import { BeverageEnum, ToppingsEnum } from '../../types';
+import { Beverage } from '../../types/beverage.type';
+import { CondimentFactory } from '../../services/condiment-factory.service';
 
 @Component({
   templateUrl: './coffee-shop.component.html',
@@ -37,26 +31,6 @@ import { CondimentDecorator } from '../../condiment.decorator';
     MatIconModule,
     CommonModule,
     MatCardModule,
-  ],
-
-  providers: [
-    {
-      provide: CONDIMENT_REGISTRY,
-      useFactory: (
-        mocha: Mocha,
-        whip: Whip,
-        soy: Soy,
-        milk: Milk,
-        cream: Cream
-      ) => ({
-        Mocha: mocha,
-        Whip: whip,
-        Soy: soy,
-        Milk: milk,
-        Cream: cream,
-      }),
-      deps: [Mocha, Whip, Soy, Milk, Cream],
-    },
   ],
 })
 export class CoffeeShopComponent {
@@ -80,22 +54,22 @@ export class CoffeeShopComponent {
   ];
 
   toppings: { name: string; value: string }[] = [
-    {
-      name: ToppingsEnum.Cream,
-      value: ToppingsEnum.Cream,
-    },
-    {
-      name: ToppingsEnum.Milk,
-      value: ToppingsEnum.Milk,
-    },
+    // {
+    //   name: ToppingsEnum.Cream,
+    //   value: ToppingsEnum.Cream,
+    // },
+    // {
+    //   name: ToppingsEnum.Milk,
+    //   value: ToppingsEnum.Milk,
+    // },
     {
       name: ToppingsEnum.Mocha,
       value: ToppingsEnum.Mocha,
     },
-    {
-      name: ToppingsEnum.Soy,
-      value: ToppingsEnum.Soy,
-    },
+    // {
+    //   name: ToppingsEnum.Soy,
+    //   value: ToppingsEnum.Soy,
+    // },
     {
       name: ToppingsEnum.Whip,
       value: ToppingsEnum.Whip,
@@ -125,8 +99,10 @@ export class CoffeeShopComponent {
   });
 
   constructor(
-    @Inject(CONDIMENT_REGISTRY)
-    private condiments: Record<string, CondimentDecorator>
+    private espresso: Espresso,
+    private darkRoast: DarkRoast,
+    private houseBlend: HouseBlend,
+    private condimentFactory: CondimentFactory
   ) {}
 
   onAdd() {
@@ -141,17 +117,30 @@ export class CoffeeShopComponent {
   }
 
   onBuild() {
-    let beverage = this.coffeeCtrl?.value;
+    let beverage = (() => {
+      switch (this.form.value.coffee) {
+        case BeverageEnum.Espresso:
+          return this.espresso;
+        case BeverageEnum.DarkRoast:
+          return this.darkRoast;
+        case BeverageEnum.HouseBland:
+          return this.houseBlend;
+        default:
+          throw new Error('Select a coffee');
+      }
+    })();
 
-    for (const chip of this.chipSetCtrl.value) {
-      const decorator = this.condiments[chip.name];
-      if (decorator) {
-        for (let i = 0; i < chip.value; i++) {
-          beverage = decorator.decorate(beverage);
-        }
+    for (let ctrl of this.chipSetCtrl.controls) {
+      const { name, value } = ctrl.value as {
+        name: ToppingsEnum;
+        value: number;
+      };
+      for (let i = 0; i < value; i++) {
+        beverage = this.condimentFactory.wrap(name, beverage);
       }
     }
 
+    console.log(beverage.getDescription(), '— $' + beverage.cost().toFixed(2));
     return beverage;
   }
 }

@@ -1,49 +1,22 @@
 import { Injectable, InjectionToken } from '@angular/core';
-import { Beverage } from '../beverage.base';
-import { CondimentDecorator } from '../condiment.decorator';
-
-export const CONDIMENT_REGISTRY = new InjectionToken<
-  Record<string, CondimentDecorator>
->('CondimentRegistry');
+import { CondimentDecorator } from './condiment-decorator';
 
 @Injectable({ providedIn: 'root' })
-export class Mocha {
-  decorate(beverage: Beverage): Beverage {
-    return new (class extends CondimentDecorator {
-      getDescription(): string {
-        return beverage.getDescription() + ', Mocha';
-      }
-      cost(): number {
-        return beverage.cost() + 20;
-      }
-    })();
+export class Mocha extends CondimentDecorator {
+  getDescription(): string {
+    return this.beverage.getDescription() + ', Mocha';
+  }
+  cost(): number {
+    return this.beverage.cost() + 10;
   }
 }
 
 @Injectable({ providedIn: 'root' })
-export class Whip {
-  decorate(beverage: Beverage): Beverage {
-    return new (class extends CondimentDecorator {
-      getDescription(): string {
-        return beverage.getDescription() + ', Mocha';
-      }
-      cost(): number {
-        return beverage.cost() + 20;
-      }
-    })();
+export class Whip extends CondimentDecorator {
+  getDescription(): string {
+    return this.beverage.getDescription() + ', Mocha';
   }
-}
-
-@Injectable({ providedIn: 'root' })
-export class Soy {
-  decorate(beverage: Beverage): Beverage {
-    return new (class extends CondimentDecorator {
-      getDescription(): string {
-        return beverage.getDescription() + ', Mocha';
-      }
-      cost(): number {
-        return beverage.cost() + 20;
-      }
-    })();
+  cost(): number {
+    return this.beverage.cost() + 20;
   }
 }

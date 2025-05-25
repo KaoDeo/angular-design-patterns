@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Beverage } from '../beverage.base';
+import { Beverage } from '../types/beverage.type';
 
 @Injectable({
   providedIn: 'root',
 })
-export class DarkRoast extends Beverage {
-  constructor() {
-    super();
-    this.description = 'Dark Roast';
+export class DarkRoast implements Beverage {
+  getDescription() {
+    return 'Dark Roast';
   }
-  cost(): number {
-    return 120;
+  cost() {
+    return 1.99;
   }
 }
