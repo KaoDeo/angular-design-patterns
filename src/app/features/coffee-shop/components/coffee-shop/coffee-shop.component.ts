@@ -136,6 +136,15 @@ export class CoffeeShopComponent {
         value: number;
       };
       for (let i = 0; i < value; i++) {
+        /**
+That creates this decorator tree
+
+Espresso
+  └── Mocha
+        └── Mocha
+              └── Whip
+*/
+
         beverage = this.condimentFactory.wrap(name, beverage);
       }
     }

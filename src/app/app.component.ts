@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { ThemePreviewComponent } from './features/theme-switcher';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, ThemePreviewComponent],
   templateUrl: './app.component.html',
 })
-export class AppComponent {
-  title = 'message-sender-with-strategy-pattern';
-}
+export class AppComponent {}
